@@ -156,6 +156,34 @@ Or running the pre-built distribution binary:
 ./build/install/battleship/bin/battleship
 ```
 
+### macOS Application Bundle (.app & .zip)
+
+Build a native macOS application bundle (`Battleship.app`) and distribution archive:
+
+```bash
+# Using Gradle
+./gradlew packageMac
+
+# Or using the package script directly
+./package-macos.sh
+```
+
+The resulting archives are generated in:
+- `build/distributions/Battleship-1.0.0-macOS.zip`
+- `build/distributions/Battleship-1.0.0-macOS.tar.gz`
+- Staged bundle: `build/macos/Battleship.app`
+
+**To run on macOS:**
+1. Extract `Battleship-1.0.0-macOS.zip`
+2. Move `Battleship.app` to `/Applications` (or keep in Downloads/Desktop)
+3. Double-click `Battleship.app` to launch!
+   *(Or launch from Terminal with: `open Battleship.app`)*
+
+The macOS bundle features:
+- Retina multi-resolution Apple icon (`battleship.icns` supporting 16×16 to 1024×1024)
+- Native macOS menu bar and dock integration (`-Dapple.laf.useScreenMenuBar=true`, `-Xdock:name="Battleship"`)
+- Smart Java 21+ detection (Homebrew, `java_home`, Adoptium) with a native macOS graphical error prompt if a compatible JRE is missing.
+
 ### Debian Package (.deb)
 
 Build a Debian package for Ubuntu, Debian, Linux Mint, and derivatives:
