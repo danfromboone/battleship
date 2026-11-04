@@ -4,10 +4,10 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-echo "=== Packaging Battleship RPM for Red Hat, Fedora, openSUSE, and CentOS ==="
+echo "=== Packaging Fleet Strike RPM for Red Hat, Fedora, openSUSE, and CentOS ==="
 ./gradlew packageRpm
 
-RPM_FILE=$(find build/distributions -name "battleship-*.noarch.rpm" | head -n1)
+RPM_FILE=$(find build/distributions -name "fleetstrike-*.noarch.rpm" | head -n1)
 
 echo ""
 echo "To install on Fedora / RHEL / CentOS / Rocky Linux / AlmaLinux:"
@@ -20,4 +20,4 @@ echo "Or using rpm directly:"
 echo "    sudo rpm -ivh $RPM_FILE"
 echo ""
 echo "To query package info after install:"
-echo "    rpm -qil battleship"
+echo "    rpm -qil fleetstrike"

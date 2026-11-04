@@ -7,13 +7,13 @@ cd "$SCRIPT_DIR"
 BUILD_DIR="$SCRIPT_DIR/build"
 
 # Ensure JAR is built
-if [ ! -f "$BUILD_DIR/libs/battleship-1.0.0.jar" ]; then
+if [ ! -f "$BUILD_DIR/libs/fleetstrike-1.0.0.jar" ]; then
     echo "=== Building Application JAR ==="
     ./gradlew jar
 fi
 
 VERSION=$(grep "version = " build.gradle | head -n1 | cut -d"'" -f2)
-APP_NAME="Battleship"
+APP_NAME="FleetStrike"
 STAGE_DIR="$BUILD_DIR/windows/${APP_NAME}"
 DIST_DIR="$BUILD_DIR/distributions"
 
@@ -24,16 +24,16 @@ mkdir -p "$STAGE_DIR/icon"
 mkdir -p "$DIST_DIR"
 
 # 1. Copy Application JAR
-cp "$BUILD_DIR/libs/battleship-${VERSION}.jar" "$STAGE_DIR/lib/"
+cp "$BUILD_DIR/libs/fleetstrike-${VERSION}.jar" "$STAGE_DIR/lib/"
 
 # 2. Copy Launchers
-cp packaging/windows/Battleship.bat "$STAGE_DIR/"
-cp packaging/windows/Battleship.vbs "$STAGE_DIR/"
-cp packaging/windows/Battleship-Console.bat "$STAGE_DIR/"
+cp packaging/windows/FleetStrike.bat "$STAGE_DIR/"
+cp packaging/windows/FleetStrike.vbs "$STAGE_DIR/"
+cp packaging/windows/FleetStrike-Console.bat "$STAGE_DIR/"
 cp packaging/windows/CreateShortcut.vbs "$STAGE_DIR/"
 
 # 3. Copy Icon
-cp packaging/windows/battleship.ico "$STAGE_DIR/icon/"
+cp packaging/windows/fleetstrike.ico "$STAGE_DIR/icon/"
 
 # 4. Copy Documentation with Windows CRLF line endings
 sed 's/$/\r/' README.md > "$STAGE_DIR/README.txt"
@@ -52,6 +52,6 @@ echo "    $ZIP_OUTPUT"
 echo ""
 echo "To run on Windows:"
 echo "    1. Unzip ${APP_NAME}-${VERSION}-Windows.zip"
-echo "    2. Double-click 'Battleship.vbs' or 'Battleship.bat' to launch the GUI!"
+echo "    2. Double-click 'FleetStrike.vbs' or 'FleetStrike.bat' to launch the GUI!"
 echo "    3. (Optional) Run 'CreateShortcut.vbs' to place a shortcut on your Desktop."
-echo "    4. Or run 'Battleship-Console.bat' for terminal mode."
+echo "    4. Or run 'FleetStrike-Console.bat' for terminal mode."

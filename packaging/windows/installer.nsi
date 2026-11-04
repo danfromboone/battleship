@@ -1,14 +1,14 @@
-; NSIS Modern User Interface Installer Script for Battleship
+; NSIS Modern User Interface Installer Script for Fleet Strike
 
 !include "MUI2.nsh"
 
-Name "Battleship"
-OutFile "..\..\build\distributions\Battleship-1.0.0-Setup.exe"
-InstallDir "$PROGRAMFILES64\Battleship"
+Name "Fleet Strike"
+OutFile "..\..\build\distributions\FleetStrike-1.0.0-Setup.exe"
+InstallDir "$PROGRAMFILES64\FleetStrike"
 RequestExecutionLevel admin
 
-!define MUI_ICON "battleship.ico"
-!define MUI_UNICON "battleship.ico"
+!define MUI_ICON "fleetstrike.ico"
+!define MUI_UNICON "fleetstrike.ico"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
@@ -20,20 +20,20 @@ RequestExecutionLevel admin
 
 !insertmacro MUI_LANGUAGE "English"
 
-Section "Battleship Core" SecCore
+Section "Fleet Strike Core" SecCore
     SetOutPath "$INSTDIR"
-    File /r "..\..\build\windows\Battleship\*.*"
+    File /r "..\..\build\windows\FleetStrike\*.*"
     
-    CreateDirectory "$SMPROGRAMS\Battleship"
-    CreateShortcut "$SMPROGRAMS\Battleship\Battleship.lnk" "$WINDIR\System32\wscript.exe" '"$INSTDIR\Battleship.vbs"' "$INSTDIR\icon\battleship.ico"
-    CreateShortcut "$DESKTOP\Battleship.lnk" "$WINDIR\System32\wscript.exe" '"$INSTDIR\Battleship.vbs"' "$INSTDIR\icon\battleship.ico"
+    CreateDirectory "$SMPROGRAMS\Fleet Strike"
+    CreateShortcut "$SMPROGRAMS\Fleet Strike\Fleet Strike.lnk" "$WINDIR\System32\wscript.exe" '"$INSTDIR\FleetStrike.vbs"' "$INSTDIR\icon\fleetstrike.ico"
+    CreateShortcut "$DESKTOP\Fleet Strike.lnk" "$WINDIR\System32\wscript.exe" '"$INSTDIR\FleetStrike.vbs"' "$INSTDIR\icon\fleetstrike.ico"
     
     WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
 
 Section "Uninstall"
     RMDir /r "$INSTDIR"
-    Delete "$SMPROGRAMS\Battleship\Battleship.lnk"
-    RMDir "$SMPROGRAMS\Battleship"
-    Delete "$DESKTOP\Battleship.lnk"
+    Delete "$SMPROGRAMS\Fleet Strike\Fleet Strike.lnk"
+    Delete "$DESKTOP\Fleet Strike.lnk"
+    RMDir "$SMPROGRAMS\Fleet Strike"
 SectionEnd

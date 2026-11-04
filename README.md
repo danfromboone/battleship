@@ -1,12 +1,14 @@
-# Classic Battleship Console Application
+# Fleet Strike - Tactical Naval Warfare
 
-A classic, console-based **Battleship** game built in **Java** strictly adhering to **Domain-Driven Design (DDD)** principles and Hexagonal / Layered Architecture.
+**Fleet Strike** is a modern, tactical naval combat simulation game built in **Java 21** strictly adhering to **Domain-Driven Design (DDD)** principles and Hexagonal / Layered Architecture.
+
+Inspired by the classic World War I paper-and-pencil game *Salvo* and tactical naval strategy, Fleet Strike features both a rich **Swing GUI presentation layer** and a full-featured **ANSI console terminal interface**, cross-platform packaging (Debian, RPM, macOS, Windows), and an intelligent **Hunt-and-Target AI**.
 
 ---
 
 ## 🎯 Features
 
-- **Classic Rules & Fleet**:
+- **Classic Naval Rules & Fleet**:
   - Standard 10×10 ocean grid (columns `A`–`J`, rows `1`–`10`).
   - Standard 5-ship fleet:
     - **Carrier** (size 5)
@@ -14,22 +16,27 @@ A classic, console-based **Battleship** game built in **Java** strictly adhering
     - **Cruiser** (size 3)
     - **Submarine** (size 3)
     - **Destroyer** (size 2)
-  - Horizontal & Vertical placement.
-  - Sinking announcements: *"BOOM! You sank the Battleship!"*
+  - Horizontal & Vertical placement with live hover collision detection.
+  - Sinking announcements: *"BOOM! Direct hit! Cruiser has been sunk!"*
 - **Game Modes**:
-  1. **Single Player (Human vs. Smart Computer)**: Play against a tactical AI.
-  2. **Two Players (Local Hotseat)**: Pass-and-play with screen clearing to protect hidden fleets.
-  3. **AI vs AI Simulation**: Watch two autonomous AI commanders battle in real time.
+  1. **Single Player (Human vs. Smart Computer)**: Engage a tactical AI using hunt-and-target probability grids.
+  2. **Two Players (Local Hotseat)**: Pass-and-play with screen shielding to protect confidential fleet formations.
+  3. **AI vs AI Simulation**: Watch two autonomous AI commanders battle in real time with speed control and turn stepping.
 - **Smart AI Strategy**:
   - Implements **Hunt-and-Target** mode.
   - In **Hunt Mode**: Uses parity/checkerboard targeting (targeting cells where `(row + col) % 2 == 0`) since ships are length $\ge 2$, pruning moves that cannot fit valid ships.
   - In **Target Mode**: When an enemy ship is hit, it targets adjacent orthogonal neighbors. When 2+ hits form a line, it identifies collinear endpoints until the ship is destroyed.
+- **Swing Graphical Presentation Layer**:
+  - Deep tactical dark naval aesthetic.
+  - Side-by-side **Target Radar (Offense)** and **Your Fleet (Defense)** grids.
+  - Live damage segment health bars for each warship class.
+  - Real-time combat log tracking shots, hits, and sinkings.
+  - Pass-and-play turn privacy shields.
+  - Post-game victory fanfare with detailed accuracy and shot statistics.
 - **Console UI & Rendering**:
-  - Side-by-side presentation of **Your Fleet (Defense)** and **Radar Tracking (Offense)**.
+  - Side-by-side terminal presentation of Defense and Offense grids.
   - ANSI color-coded grid cells (`~` Water, `S` Ship, `X` Hit, `O` Miss, `#` Sunk).
-  - Real-time fleet health bars showing intact segments vs damages for each ship type.
-  - Robust coordinate input parsing (`B4`, `b4`, `4B`, `J10`) with bounds and duplicate shot checking.
-  - Battle statistics (turn count, hit count, accuracy percentage).
+  - Robust coordinate input parsing (`B4`, `b4`, `4B`, `J10`).
 
 ---
 
@@ -38,7 +45,7 @@ A classic, console-based **Battleship** game built in **Java** strictly adhering
 The application strictly separates domain logic from application workflow, infrastructure, and presentation:
 
 ```
-com.battleship
+com.fleetstrike
 ├── domain                              # Pure business logic & invariants
 │   ├── model
 │   │   ├── coordinate
@@ -76,14 +83,14 @@ com.battleship
 │   ├── policy                          # Domain Services
 │   │   └── FleetPlacementService       # Placement algorithm ensuring valid random deployments
 │   └── exception                       # Explicit Domain Exceptions
-│       ├── BattleshipException
+│       ├── FleetStrikeException
 │       ├── InvalidCoordinateException
 │       ├── OutOfBoundsException
 │       ├── ShipOverlapException
 │       ├── CellAlreadyAttackedException
 │       └── InvalidGameStateException
 ├── application                         # Application Use Cases & Orchestration
-│   ├── BattleshipApplicationService    # Orchestrates commands to domain aggregates
+│   ├── FleetStrikeApplicationService   # Orchestrates commands to domain aggregates
 │   └── command                         # Commands (CreateGameCommand, PlaceShipCommand, FireShotCommand)
 ├── infrastructure                      # Technical implementations & adapters
 │   ├── ai
@@ -107,28 +114,15 @@ com.battleship
         ├── BattleViewPanel             # Dual-board battle center (Radar offense vs Fleet defense)
         ├── HotseatPassDialog           # Security shielding dialog for 2-player local play
         ├── GameOverDialog              # Victory fanfare, battle statistics, accuracy analysis
-        └── BattleshipSwingApp          # Main JFrame window & lifecycle orchestrator
+        └── FleetStrikeApp              # Main JFrame window & lifecycle orchestrator
 ```
-
-### DDD Tactical Patterns Employed:
-1. **Aggregates & Aggregate Roots**:
-   - `Game` is the aggregate root that governs match lifecycle, active turns, firing authorization, victory conditions, and state transitions.
-   - `Fleet` encapsulates ship collection integrity, preventing overlapping placements and verifying complete fleets.
-2. **Value Objects**:
-   - `Coordinate`, `GridDimension`, `Orientation`, `ShipPlacement`, `ShotResult`, `PlayerId`, `GameId`, `TurnRecord` are immutable and have value-based equality and self-validation.
-3. **Domain Events**:
-   - `ShotFiredEvent`, `ShipHitEvent`, `ShipSunkEvent`, `GameOverEvent`, and `ShipPlacedEvent` decouple game events from notifications and external listeners.
-4. **Domain Services**:
-   - `FleetPlacementService` encapsulates algorithm-heavy placement logic without bloating aggregate boundaries.
-5. **Repositories (Ports & Adapters)**:
-   - `GameRepository` separates persistence concerns from the domain layer.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Java 21+ (Java 27 tested and supported)
+- Java 21+
 
 ### Running the Application
 
@@ -140,7 +134,7 @@ com.battleship
 # Or directly via Gradle
 ./gradlew run
 
-# Or launch BattleshipSwingApp directly
+# Or launch FleetStrikeApp directly
 ./gradlew run --args="--gui"
 ```
 
@@ -150,138 +144,56 @@ com.battleship
 ./gradlew run --args="--console"
 ```
 
-Or running the pre-built distribution binary:
+---
+
+## 📦 Cross-Platform Packages
+
+### Debian / Ubuntu / Linux Mint (.deb)
 ```bash
-./gradlew installDist
-./build/install/battleship/bin/battleship
+./gradlew packageDeb
+# or ./package-deb.sh
+```
+Output: `build/distributions/fleetstrike_1.0.0_all.deb`
+```bash
+sudo apt install ./build/distributions/fleetstrike_1.0.0_all.deb
 ```
 
-### Windows Portable Distribution (.zip)
-
-Build a self-contained Windows package:
-
+### Red Hat / Fedora / CentOS / openSUSE (.rpm)
 ```bash
-# Using Gradle
-./gradlew packageWindows
-
-# Or using the package script directly
-./package-windows.sh
+./gradlew packageRpm
+# or ./package-rpm.sh
 ```
+Output: `build/distributions/fleetstrike-1.0.0-1.noarch.rpm`
+```bash
+# Fedora / RHEL
+sudo dnf install ./build/distributions/fleetstrike-1.0.0-1.noarch.rpm
 
-The resulting archive is generated in:
-- `build/distributions/Battleship-1.0.0-Windows.zip`
-- Staged folder: `build/windows/Battleship/`
-
-**To run on Windows:**
-1. Extract `Battleship-1.0.0-Windows.zip`.
-2. Double-click `Battleship.vbs` (or `Battleship.bat`) to launch the Swing GUI.
-3. *(Optional)* Run `CreateShortcut.vbs` to automatically add a shortcut with the Battleship icon to your Desktop.
-4. Or run `Battleship-Console.bat` for terminal play.
-
-The Windows distribution includes:
-- `Battleship.vbs`: Silent windowless launcher that executes `javaw` without a command prompt popup.
-- `Battleship.bat`: Batch launcher with automatic Java 21+ detection and download guidance.
-- `CreateShortcut.vbs`: VBScript that creates a Desktop shortcut configured with `icon/battleship.ico`.
-- `installer.nsi` & `setup.iss`: Installer build scripts for NSIS and Inno Setup to create `Battleship-Setup.exe`.
-- Multi-resolution Windows icon (`battleship.ico` containing 16×16 to 256×256 icon resources).
+# openSUSE
+sudo zypper install ./build/distributions/fleetstrike-1.0.0-1.noarch.rpm
+```
 
 ### macOS Application Bundle (.app & .zip)
-
-Build a native macOS application bundle (`Battleship.app`) and distribution archive:
-
 ```bash
-# Using Gradle
 ./gradlew packageMac
-
-# Or using the package script directly
-./package-macos.sh
+# or ./package-macos.sh
 ```
+Output: `build/distributions/FleetStrike-1.0.0-macOS.zip` (contains `FleetStrike.app`).
+Extract and double-click `FleetStrike.app` to launch.
 
-The resulting archives are generated in:
-- `build/distributions/Battleship-1.0.0-macOS.zip`
-- `build/distributions/Battleship-1.0.0-macOS.tar.gz`
-- Staged bundle: `build/macos/Battleship.app`
-
-**To run on macOS:**
-1. Extract `Battleship-1.0.0-macOS.zip`
-2. Move `Battleship.app` to `/Applications` (or keep in Downloads/Desktop)
-3. Double-click `Battleship.app` to launch!
-   *(Or launch from Terminal with: `open Battleship.app`)*
-
-The macOS bundle features:
-- Retina multi-resolution Apple icon (`battleship.icns` supporting 16×16 to 1024×1024)
-- Native macOS menu bar and dock integration (`-Dapple.laf.useScreenMenuBar=true`, `-Xdock:name="Battleship"`)
-- Smart Java 21+ detection (Homebrew, `java_home`, Adoptium) with a native macOS graphical error prompt if a compatible JRE is missing.
-
-### RPM Package (.rpm)
-
-Build an RPM package for Fedora, RHEL, CentOS, Rocky Linux, AlmaLinux, and openSUSE:
-
+### Windows Portable Distribution (.zip)
 ```bash
-# Using Gradle
-./gradlew packageRpm
-
-# Or using the package script directly
-./package-rpm.sh
+./gradlew packageWindows
+# or ./package-windows.sh
 ```
+Output: `build/distributions/FleetStrike-1.0.0-Windows.zip`.
+Extract and double-click `FleetStrike.vbs` (or `FleetStrike.bat`) to launch.
 
-The resulting package will be in `build/distributions/battleship-1.0.0-1.noarch.rpm`.
+---
 
-**To install on Fedora / RHEL / CentOS / Rocky Linux / AlmaLinux:**
-```bash
-sudo dnf install ./build/distributions/battleship-1.0.0-1.noarch.rpm
-```
+## 🧪 Running Tests
 
-**To install on openSUSE / SLES:**
-```bash
-sudo zypper install ./build/distributions/battleship-1.0.0-1.noarch.rpm
-```
-
-This installs:
-- `/usr/bin/battleship` command in your `$PATH`
-- Desktop entry in application launchers (`/usr/share/applications/battleship.desktop`)
-- Scalable SVG icon (`/usr/share/icons/hicolor/scalable/apps/battleship.svg`)
-- Documentation in `/usr/share/doc/battleship/`
-
-Also includes a complete RPM spec file in [`packaging/rpm/battleship.spec`](packaging/rpm/battleship.spec) for native `rpmbuild` or Copr builds.
-
-### Debian Package (.deb)
-
-Build a Debian package for Ubuntu, Debian, Linux Mint, and derivatives:
-
-```bash
-# Using Gradle
-./gradlew packageDeb
-
-# Or using the package script directly
-./package-deb.sh
-```
-
-The resulting package will be in `build/distributions/battleship_1.0.0_all.deb`.
-
-Install it system-wide:
-```bash
-sudo apt install ./build/distributions/battleship_1.0.0_all.deb
-```
-
-This installs:
-- `/usr/bin/battleship` command in your `$PATH`
-- Desktop entry in application launchers (`/usr/share/applications/battleship.desktop`)
-- Scalable SVG icon (`/usr/share/icons/hicolor/scalable/apps/battleship.svg`)
-- Documentation in `/usr/share/doc/battleship/`
-
-### Running Tests
 Execute the unit test suite:
 ```bash
 ./gradlew test
 ```
-All unit tests cover coordinates, ships, fleet validation, ocean boards, game lifecycle, AI targeting, and application services.
-
----
-
-## 🎮 How to Play
-
-1. Start the game and select **1** for Single Player (or **2** for Two Player).
-2. Choose between **Automatic Placement** (instant setup) or **Manual Placement** (placing each of the 5 ships by entering coordinates like `B3 H` or `E5 V`).
-3. Take turns entering coordinates to fire upon the opponent (e.g., `B4`, `J10`).
-4. Watch the side-by-side radar and status screens to track hits and sink all 5 enemy vessels!
+All unit tests cover coordinates, ships, fleet validation, ocean boards, game lifecycle, AI targeting, application services, and Swing presentation panels.

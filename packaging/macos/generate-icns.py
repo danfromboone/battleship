@@ -8,9 +8,9 @@ from PIL import Image
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "../.."))
-SVG_PATH = os.path.join(PROJECT_ROOT, "packaging/debian/battleship.svg")
-ICNS_PATH = os.path.join(SCRIPT_DIR, "battleship.icns")
-PNG_1024 = os.path.join(SCRIPT_DIR, "battleship_1024.png")
+SVG_PATH = os.path.join(PROJECT_ROOT, "packaging/debian/fleetstrike.svg")
+ICNS_PATH = os.path.join(SCRIPT_DIR, "fleetstrike.icns")
+PNG_1024 = os.path.join(SCRIPT_DIR, "fleetstrike_1024.png")
 
 print(f"Rendering {SVG_PATH} to 1024x1024 PNG...")
 subprocess.run([

@@ -7,13 +7,13 @@ cd "$SCRIPT_DIR"
 BUILD_DIR="$SCRIPT_DIR/build"
 
 # Ensure jar is built
-if [ ! -f "$BUILD_DIR/libs/battleship-1.0.0.jar" ]; then
+if [ ! -f "$BUILD_DIR/libs/fleetstrike-1.0.0.jar" ]; then
     echo "=== Building Application JAR ==="
     ./gradlew jar
 fi
 
 VERSION=$(grep "version = " build.gradle | head -n1 | cut -d"'" -f2)
-APP_NAME="Battleship"
+APP_NAME="FleetStrike"
 BUNDLE_DIR="$BUILD_DIR/macos/${APP_NAME}.app"
 DIST_DIR="$BUILD_DIR/distributions"
 
@@ -33,14 +33,14 @@ cp packaging/macos/PkgInfo "$BUNDLE_DIR/Contents/PkgInfo"
 sed -i "s|<string>1.0.0</string>|<string>${VERSION}</string>|g" "$BUNDLE_DIR/Contents/Info.plist"
 
 # 3. Executable launcher
-cp packaging/macos/launcher.sh "$BUNDLE_DIR/Contents/MacOS/battleship"
-chmod 755 "$BUNDLE_DIR/Contents/MacOS/battleship"
+cp packaging/macos/launcher.sh "$BUNDLE_DIR/Contents/MacOS/fleetstrike"
+chmod 755 "$BUNDLE_DIR/Contents/MacOS/fleetstrike"
 
 # 4. Icon
-cp packaging/macos/battleship.icns "$BUNDLE_DIR/Contents/Resources/battleship.icns"
+cp packaging/macos/fleetstrike.icns "$BUNDLE_DIR/Contents/Resources/fleetstrike.icns"
 
 # 5. Application JAR & Docs
-cp "$BUILD_DIR/libs/battleship-${VERSION}.jar" "$BUNDLE_DIR/Contents/Resources/app/"
+cp "$BUILD_DIR/libs/fleetstrike-${VERSION}.jar" "$BUNDLE_DIR/Contents/Resources/app/"
 cp README.md "$BUNDLE_DIR/Contents/Resources/"
 
 echo "=== Packaging macOS Distribution Archives ==="

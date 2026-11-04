@@ -5,17 +5,17 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Battleship</string>
+    <string>Fleet Strike</string>
     <key>CFBundleExecutable</key>
-    <string>battleship</string>
+    <string>fleetstrike</string>
     <key>CFBundleIconFile</key>
-    <string>battleship.icns</string>
+    <string>fleetstrike.icns</string>
     <key>CFBundleIdentifier</key>
-    <string>com.battleship.app</string>
+    <string>com.fleetstrike.app</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>Battleship</string>
+    <string>Fleet Strike</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>

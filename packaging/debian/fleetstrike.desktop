@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Fleet Strike
+Comment=Tactical Naval Warfare Simulation
+GenericName=Naval Strategy Game
+Exec=/usr/bin/fleetstrike
+Icon=fleetstrike
+Terminal=false
+Type=Application
+Categories=Game;StrategyGame;BoardGame;
+Keywords=naval;warfare;strategy;fleet;strike;sea;boardgame;
+StartupNotify=true
+StartupWMClass=com.fleetstrike.presentation.swing.FleetStrikeApp

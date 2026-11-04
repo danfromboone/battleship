@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group = 'com.battleship'
+group = 'com.fleetstrike'
 version = '1.0.0'
 
 java {
@@ -28,14 +28,14 @@ dependencies {
 }
 
 application {
-    mainClass = 'com.battleship.Main'
+    mainClass = 'com.fleetstrike.Main'
 }
 
 tasks.named('jar') {
     manifest {
         attributes(
-            'Main-Class': 'com.battleship.Main',
-            'Implementation-Title': 'Battleship',
+            'Main-Class': 'com.fleetstrike.Main',
+            'Implementation-Title': 'Fleet Strike',
             'Implementation-Version': project.version
         )
     }
@@ -91,14 +91,14 @@ tasks.register('packageRpm') {
         def builder = builderClass.getDeclaredConstructor().newInstance()
 
         def debVersion = project.version.toString()
-        builder.setPackage("battleship", debVersion, "1")
+        builder.setPackage("fleetstrike", debVersion, "1")
         builder.setType(Enum.valueOf(rpmTypeClass, "BINARY"))
         builder.setPlatform(Enum.valueOf(archClass, "NOARCH"), Enum.valueOf(osClass, "LINUX"))
-        builder.setSummary("Classic Battleship tactical naval warfare game")
-        builder.setDescription("Battleship is a classic naval strategy game built with Java 21 adhering to Domain-Driven Design (DDD) principles. Features both a rich Swing GUI presentation layer and an ANSI console terminal interface.")
+        builder.setSummary("Fleet Strike - Tactical naval warfare game")
+        builder.setDescription("Fleet Strike is a tactical naval strategy game built with Java 21 adhering to Domain-Driven Design (DDD) principles. Features both a rich Swing GUI presentation layer and an ANSI console terminal interface.")
         builder.setLicense("MIT")
         builder.setGroup("Amusements/Games")
-        builder.setUrl("https://github.com/danfromboone/battleship")
+        builder.setUrl("https://github.com/danfromboone/fleetstrike")
         builder.setVendor("Dan")
         builder.setPackager("Dan <danfromboone@gmail.com>")
         builder.addDependencyMore("java-headless", "21")
@@ -107,20 +107,20 @@ tasks.register('packageRpm') {
         distDir.mkdirs()
 
         // Application files
-        builder.addFile("/usr/share/battleship/bin/battleship", file("${buildDir}/install/battleship/bin/battleship"), 0755)
-        builder.addFile("/usr/share/battleship/lib/battleship-${debVersion}.jar", file("${buildDir}/install/battleship/lib/battleship-${debVersion}.jar"), 0644)
+        builder.addFile("/usr/share/fleetstrike/bin/fleetstrike", file("${buildDir}/install/fleetstrike/bin/fleetstrike"), 0755)
+        builder.addFile("/usr/share/fleetstrike/lib/fleetstrike-${debVersion}.jar", file("${buildDir}/install/fleetstrike/lib/fleetstrike-${debVersion}.jar"), 0644)
 
         // Symlink in /usr/bin
-        builder.addLink("/usr/bin/battleship", "/usr/share/battleship/bin/battleship")
+        builder.addLink("/usr/bin/fleetstrike", "/usr/share/fleetstrike/bin/fleetstrike")
 
         // Desktop entry and icons
-        builder.addFile("/usr/share/applications/battleship.desktop", file("packaging/debian/battleship.desktop"), 0644)
-        builder.addFile("/usr/share/icons/hicolor/scalable/apps/battleship.svg", file("packaging/debian/battleship.svg"), 0644)
-        builder.addFile("/usr/share/pixmaps/battleship.svg", file("packaging/debian/battleship.svg"), 0644)
+        builder.addFile("/usr/share/applications/fleetstrike.desktop", file("packaging/debian/fleetstrike.desktop"), 0644)
+        builder.addFile("/usr/share/icons/hicolor/scalable/apps/fleetstrike.svg", file("packaging/debian/fleetstrike.svg"), 0644)
+        builder.addFile("/usr/share/pixmaps/fleetstrike.svg", file("packaging/debian/fleetstrike.svg"), 0644)
 
         // Documentation
-        builder.addFile("/usr/share/doc/battleship/README.md", file("README.md"), 0644)
-        builder.addFile("/usr/share/doc/battleship/copyright", file("packaging/debian/copyright"), 0644)
+        builder.addFile("/usr/share/doc/fleetstrike/README.md", file("README.md"), 0644)
+        builder.addFile("/usr/share/doc/fleetstrike/copyright", file("packaging/debian/copyright"), 0644)
 
         def rpmFilename = builder.build(distDir)
         println "\n>>> SUCCESS: RPM package generated at:\n    ${distDir}/${rpmFilename}\n"

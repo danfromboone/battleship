@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Battleship
+Upstream-Name: Fleet Strike
 Upstream-Contact: Dan <danfromboone@gmail.com>
-Source: https://github.com/danfromboone/battleship
+Source: https://github.com/danfromboone/fleetstrike
 
 Files: *
 Copyright: 2026 Dan <danfromboone@gmail.com>

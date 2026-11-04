@@ -3,7 +3,7 @@ set -e
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 APP_DIR="$DIR/Resources/app"
-JAR_PATH="$APP_DIR/battleship-1.0.0.jar"
+JAR_PATH="$APP_DIR/fleetstrike-1.0.0.jar"
 
 # Attempt to locate Java 21+ on macOS
 JAVA_EXEC=""
@@ -43,16 +43,16 @@ fi
 # If no Java found, display native macOS alert
 if [ -z "$JAVA_EXEC" ]; then
     if command -v osascript >/dev/null 2>&1; then
-        osascript -e 'display alert "Java Required" message "Battleship requires Java 21 or newer to run. Please install Java from https://adoptium.net or via Homebrew (brew install openjdk@21)." as critical'
+        osascript -e 'display alert "Java Required" message "Fleet Strike requires Java 21 or newer to run. Please install Java from https://adoptium.net or via Homebrew (brew install openjdk@21)." as critical'
     fi
-    echo "ERROR: Java 21+ is required to run Battleship. Please install a compatible JRE/JDK." >&2
+    echo "ERROR: Java 21+ is required to run Fleet Strike. Please install a compatible JRE/JDK." >&2
     exit 1
 fi
 
 # Execute application with macOS native integration flags
 exec "$JAVA_EXEC" \
-    -Xdock:name="Battleship" \
-    -Xdock:icon="$DIR/Resources/battleship.icns" \
+    -Xdock:name="Fleet Strike" \
+    -Xdock:icon="$DIR/Resources/fleetstrike.icns" \
     -Dapple.laf.useScreenMenuBar=true \
-    -Dcom.apple.mrj.application.apple.menu.about.name="Battleship" \
+    -Dcom.apple.mrj.application.apple.menu.about.name="Fleet Strike" \
     -jar "$JAR_PATH" "$@"
