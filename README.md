@@ -156,6 +156,31 @@ Or running the pre-built distribution binary:
 ./build/install/battleship/bin/battleship
 ```
 
+### Debian Package (.deb)
+
+Build a Debian package for Ubuntu, Debian, Linux Mint, and derivatives:
+
+```bash
+# Using Gradle
+./gradlew packageDeb
+
+# Or using the package script directly
+./package-deb.sh
+```
+
+The resulting package will be in `build/distributions/battleship_1.0.0_all.deb`.
+
+Install it system-wide:
+```bash
+sudo apt install ./build/distributions/battleship_1.0.0_all.deb
+```
+
+This installs:
+- `/usr/bin/battleship` command in your `$PATH`
+- Desktop entry in application launchers (`/usr/share/applications/battleship.desktop`)
+- Scalable SVG icon (`/usr/share/icons/hicolor/scalable/apps/battleship.svg`)
+- Documentation in `/usr/share/doc/battleship/`
+
 ### Running Tests
 Execute the unit test suite:
 ```bash

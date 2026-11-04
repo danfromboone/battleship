@@ -37,3 +37,11 @@ test {
 run {
     standardInput = System.in
 }
+
+tasks.register('packageDeb', Exec) {
+    dependsOn 'installDist'
+    description = 'Builds a standalone Debian (.deb) package using dpkg-deb'
+    group = 'distribution'
+    commandLine './package-deb.sh'
+}
+
