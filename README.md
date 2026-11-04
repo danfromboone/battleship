@@ -213,6 +213,38 @@ The macOS bundle features:
 - Native macOS menu bar and dock integration (`-Dapple.laf.useScreenMenuBar=true`, `-Xdock:name="Battleship"`)
 - Smart Java 21+ detection (Homebrew, `java_home`, Adoptium) with a native macOS graphical error prompt if a compatible JRE is missing.
 
+### RPM Package (.rpm)
+
+Build an RPM package for Fedora, RHEL, CentOS, Rocky Linux, AlmaLinux, and openSUSE:
+
+```bash
+# Using Gradle
+./gradlew packageRpm
+
+# Or using the package script directly
+./package-rpm.sh
+```
+
+The resulting package will be in `build/distributions/battleship-1.0.0-1.noarch.rpm`.
+
+**To install on Fedora / RHEL / CentOS / Rocky Linux / AlmaLinux:**
+```bash
+sudo dnf install ./build/distributions/battleship-1.0.0-1.noarch.rpm
+```
+
+**To install on openSUSE / SLES:**
+```bash
+sudo zypper install ./build/distributions/battleship-1.0.0-1.noarch.rpm
+```
+
+This installs:
+- `/usr/bin/battleship` command in your `$PATH`
+- Desktop entry in application launchers (`/usr/share/applications/battleship.desktop`)
+- Scalable SVG icon (`/usr/share/icons/hicolor/scalable/apps/battleship.svg`)
+- Documentation in `/usr/share/doc/battleship/`
+
+Also includes a complete RPM spec file in [`packaging/rpm/battleship.spec`](packaging/rpm/battleship.spec) for native `rpmbuild` or Copr builds.
+
 ### Debian Package (.deb)
 
 Build a Debian package for Ubuntu, Debian, Linux Mint, and derivatives:

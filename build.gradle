@@ -15,11 +15,16 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    rpmPackager
+}
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.assertj:assertj-core:3.25.3'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    rpmPackager 'org.redline-rpm:redline:1.2.10'
 }
 
 application {
@@ -67,5 +72,58 @@ tasks.register('packageWindows', Exec) {
     description = 'Builds a standalone Windows Portable Distribution package and zip archive'
     group = 'distribution'
     commandLine './package-windows.sh'
+}
+
+tasks.register('packageRpm') {
+    dependsOn 'installDist'
+    description = 'Builds an RPM package (.rpm) for Fedora, RHEL, CentOS, openSUSE, and Rocky Linux'
+    group = 'distribution'
+
+    doLast {
+        def urls = configurations.rpmPackager.files.collect { it.toURI().toURL() } as URL[]
+        def cl = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader())
+
+        def builderClass = cl.loadClass('org.redline_rpm.Builder')
+        def archClass = cl.loadClass('org.redline_rpm.header.Architecture')
+        def rpmTypeClass = cl.loadClass('org.redline_rpm.header.RpmType')
+        def osClass = cl.loadClass('org.redline_rpm.header.Os')
+
+        def builder = builderClass.getDeclaredConstructor().newInstance()
+
+        def debVersion = project.version.toString()
+        builder.setPackage("battleship", debVersion, "1")
+        builder.setType(Enum.valueOf(rpmTypeClass, "BINARY"))
+        builder.setPlatform(Enum.valueOf(archClass, "NOARCH"), Enum.valueOf(osClass, "LINUX"))
+        builder.setSummary("Classic Battleship tactical naval warfare game")
+        builder.setDescription("Battleship is a classic naval strategy game built with Java 21 adhering to Domain-Driven Design (DDD) principles. Features both a rich Swing GUI presentation layer and an ANSI console terminal interface.")
+        builder.setLicense("MIT")
+        builder.setGroup("Amusements/Games")
+        builder.setUrl("https://github.com/danfromboone/battleship")
+        builder.setVendor("Dan")
+        builder.setPackager("Dan <danfromboone@gmail.com>")
+        builder.addDependencyMore("java-headless", "21")
+
+        def distDir = file("${buildDir}/distributions")
+        distDir.mkdirs()
+
+        // Application files
+        builder.addFile("/usr/share/battleship/bin/battleship", file("${buildDir}/install/battleship/bin/battleship"), 0755)
+        builder.addFile("/usr/share/battleship/lib/battleship-${debVersion}.jar", file("${buildDir}/install/battleship/lib/battleship-${debVersion}.jar"), 0644)
+
+        // Symlink in /usr/bin
+        builder.addLink("/usr/bin/battleship", "/usr/share/battleship/bin/battleship")
+
+        // Desktop entry and icons
+        builder.addFile("/usr/share/applications/battleship.desktop", file("packaging/debian/battleship.desktop"), 0644)
+        builder.addFile("/usr/share/icons/hicolor/scalable/apps/battleship.svg", file("packaging/debian/battleship.svg"), 0644)
+        builder.addFile("/usr/share/pixmaps/battleship.svg", file("packaging/debian/battleship.svg"), 0644)
+
+        // Documentation
+        builder.addFile("/usr/share/doc/battleship/README.md", file("README.md"), 0644)
+        builder.addFile("/usr/share/doc/battleship/copyright", file("packaging/debian/copyright"), 0644)
+
+        def rpmFilename = builder.build(distDir)
+        println "\n>>> SUCCESS: RPM package generated at:\n    ${distDir}/${rpmFilename}\n"
+    }
 }
 
