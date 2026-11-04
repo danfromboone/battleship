@@ -156,6 +156,35 @@ Or running the pre-built distribution binary:
 ./build/install/battleship/bin/battleship
 ```
 
+### Windows Portable Distribution (.zip)
+
+Build a self-contained Windows package:
+
+```bash
+# Using Gradle
+./gradlew packageWindows
+
+# Or using the package script directly
+./package-windows.sh
+```
+
+The resulting archive is generated in:
+- `build/distributions/Battleship-1.0.0-Windows.zip`
+- Staged folder: `build/windows/Battleship/`
+
+**To run on Windows:**
+1. Extract `Battleship-1.0.0-Windows.zip`.
+2. Double-click `Battleship.vbs` (or `Battleship.bat`) to launch the Swing GUI.
+3. *(Optional)* Run `CreateShortcut.vbs` to automatically add a shortcut with the Battleship icon to your Desktop.
+4. Or run `Battleship-Console.bat` for terminal play.
+
+The Windows distribution includes:
+- `Battleship.vbs`: Silent windowless launcher that executes `javaw` without a command prompt popup.
+- `Battleship.bat`: Batch launcher with automatic Java 21+ detection and download guidance.
+- `CreateShortcut.vbs`: VBScript that creates a Desktop shortcut configured with `icon/battleship.ico`.
+- `installer.nsi` & `setup.iss`: Installer build scripts for NSIS and Inno Setup to create `Battleship-Setup.exe`.
+- Multi-resolution Windows icon (`battleship.ico` containing 16×16 to 256×256 icon resources).
+
 ### macOS Application Bundle (.app & .zip)
 
 Build a native macOS application bundle (`Battleship.app`) and distribution archive:
